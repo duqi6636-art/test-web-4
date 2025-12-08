@@ -239,7 +239,7 @@ func SetOpen(c *gin.Context) {
 	// 参数绑定和验证
 	var params struct {
 		IsOpen string `form:"is_open" binding:"required,oneof=on off 1 0"`
-		Cate   string `form:"cate" binding:"required,oneof=email google_auth"`
+		Cate   string `form:"cate" binding:"required,oneof=email google"`
 	}
 
 	if err := c.ShouldBind(&params); err != nil {
@@ -249,6 +249,10 @@ func SetOpen(c *gin.Context) {
 
 	cate := params.Cate
 	open := params.IsOpen
+
+	if cate == "google" {
+		cate = "google_auth"
+	}
 
 	// 用户身份校验
 	resCode, msg, user := DealUser(c)
