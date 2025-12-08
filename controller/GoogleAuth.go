@@ -608,7 +608,7 @@ func SecurityPromptNeed(c *gin.Context) {
 			break
 		}
 	}
-	if hasAuth == 1 && (userInfo.PayMoney >= 1000 || userInfo.IsPay == "1") {
+	if hasAuth == 0 && (userInfo.PayMoney >= 1000 || userInfo.IsPay == "1") {
 		sp := models.GetUserSecurityPrompt(user.Id)
 		if sp.Suppressed == 1 {
 			need = 0
