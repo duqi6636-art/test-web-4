@@ -224,7 +224,7 @@ func VerifyCodeUnBind(c *gin.Context) {
 	}
 	uid := user.Id
 
-	err := models.DeleteUserGoogleAuth(uid)
+	err := models.DeleteUserGoogleAuthByCate(uid, "google_auth")
 	if err != nil {
 		JsonReturn(c, e.ERROR, "error", nil)
 		return
@@ -594,7 +594,7 @@ func SecurityPromptNeed(c *gin.Context) {
 		JsonReturn(c, e.ERROR, "__T_SESSION_ERROR", nil)
 		return
 	}
-	need := 0
+	need := 1
 	hasAuth := 0
 	authList, _ := models.GetAuthByUid(user.Id)
 	for _, v := range authList {
@@ -604,10 +604,10 @@ func SecurityPromptNeed(c *gin.Context) {
 			break
 		}
 	}
-	if hasAuth == 0 && (userInfo.PayMoney >= 1000 || userInfo.IsPay == "1") {
+	if hasAuth == 1 && (userInfo.PayMoney >= 1000 || userInfo.IsPay == "1") {
 		sp := models.GetUserSecurityPrompt(user.Id)
-		if sp.Suppressed == 0 {
-			need = 1
+		if sp.Suppressed == 1 {
+			need = 0
 		}
 	}
 	JsonReturn(c, e.SUCCESS, "__T_SUCCESS", map[string]int{"need": need})
