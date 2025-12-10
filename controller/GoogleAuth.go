@@ -593,29 +593,50 @@ func SecurityPromptNeed(c *gin.Context) {
 		JsonReturn(c, resCode, msg, nil)
 		return
 	}
+
+	// 获取用户信息
 	err, userInfo := models.GetUserById(user.Id)
 	if err != nil {
 		JsonReturn(c, e.ERROR, "__T_SESSION_ERROR", nil)
 		return
 	}
+
+	// 默认需要弹窗
 	need := 1
+
+	// 判断用户是否已经开启安全验证
 	hasAuth := 0
 	authList, _ := models.GetAuthByUid(user.Id)
 	for _, v := range authList {
 		cate := strings.ToLower(v.Cate)
+
+		// email 或 google_auth 开启即可
 		if (cate == "email" || cate == "google_auth") && v.IsOpen == 1 {
 			hasAuth = 1
 			break
 		}
 	}
-	if hasAuth == 0 && (userInfo.PayMoney >= 1000 || userInfo.IsPay == "1") {
+
+	// 已开启安全验证 → 不弹
+	if hasAuth == 1 {
+		need = 0
+		JsonReturn(c, e.SUCCESS, "__T_SUCCESS", map[string]int{"need": need})
+		return
+	}
+
+	// 未开启验证 → 判断金额与关闭次数
+	if userInfo.PayMoney >= 1000 || userInfo.IsPay == "1" {
+
+		// 获取安全提示记录
 		sp := models.GetUserSecurityPrompt(user.Id)
+
+		// 关闭三次 → 抑制 → 不弹
 		if sp.Suppressed == 1 {
 			need = 0
 		}
 	}
+
 	JsonReturn(c, e.SUCCESS, "__T_SUCCESS", map[string]int{"need": need})
-	return
 }
 
 func UserPromptNeed(c *gin.Context) {
