@@ -361,7 +361,7 @@ func BindEmailAuth(c *gin.Context) {
 
 	err, authInfo := models.GetUserAuthByUid(uid, "email")
 	if err == nil && authInfo.ID != 0 {
-		JsonReturn(c, e.ERROR, "__T_EMAIL_AUTH_BIND", nil)
+		JsonReturn(c, e.ERROR, "__T_EMAIL_AUTH_FAIL", nil)
 		return
 	}
 
