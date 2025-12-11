@@ -408,8 +408,26 @@ func Login(c *gin.Context) {
 		cRes := models.UpdateCodeStatus(map[string]interface{}{"id": codeId})
 		fmt.Println(cRes)
 	}
+	authTwoInfo := models.GetAuthInfoByUid(info.Id)
+	if authTwoInfo.IsOpen == 1 { // 开启了二次验证
+		_, listsInfo := models.GetLoginDeviceByIp(info.Id, ip) //如果在安全设备列表中 则不用二次验证
+		if listsInfo.ID > 0 && listsInfo.Trust > 0 {
+			authTwoInfo.IsOpen = 0
+			authTwoInfo.Cate = ""
+			authTwoInfo.Username = ""
+		}
+	}
+
+	if authTwoInfo.IsOpen == 1 {
+		sessionRes = info.Username
+	}
 	// 生成返回数据
 	data := ResUserInfo(sessionRes, ip, info)
+	data.AuthInfo = models.UserLoginAuth{
+		IsOpen: authTwoInfo.IsOpen,
+		Cate:   authTwoInfo.Cate,
+		Info:   authTwoInfo.Username,
+	}
 	JsonReturn(c, 0, "__T_LOGIN_SUCCESS", data)
 	return
 }
@@ -915,6 +933,7 @@ func MPGithubLogin(c *gin.Context) {
 }
 
 // 忘记密码，登录发送验证码
+
 func SendEmailCode(c *gin.Context) {
 	signParam := GetParams(c)
 	email := strings.TrimSpace(c.DefaultPostForm("email", ""))
@@ -927,10 +946,11 @@ func SendEmailCode(c *gin.Context) {
 		JsonReturn(c, -1, "__T_EMAIL_FORMAT_ERROR", map[string]string{"class_id": "email"})
 		return
 	}
-	if code_type == "login" || code_type == "find" {
+	if code_type == "login" || code_type == "find" || code_type == "bind_email" || code_type == "unbind_email" || code_type == "check_login" {
 
 	} else {
 		JsonReturn(c, -1, "__T_PARAM_ERROR", nil)
+		return
 	}
 	if code_type == "login" {
 		config := strings.TrimSpace(models.GetConfigVal("EmailVerifyLoginSwitch"))
@@ -1372,6 +1392,35 @@ func DoLogin(user models.Users, email, ip string, signParam models.SignParam, up
 	// 更新用户信息
 	models.UpdateUserById(user.Id, u)
 	//fmt.Println("sessionSn-------" + sessionSn)
+
+	err1, has := models.GetLoginDeviceBy(user.Id, ip)
+
+	// 操作登录设备记录
+	if err1 != nil || has.ID == 0 {
+		addDevice := models.LoginDevices{}
+		addDevice.Cate = "email_reg"
+		addDevice.Uid = user.Id
+		addDevice.Username = user.Username
+		addDevice.Email = user.Email
+		addDevice.Device = "cherry-" + util.RandStr("r", 16)
+		addDevice.DeviceNo = ip
+		addDevice.Platform = "web"
+		addDevice.Ip = ip
+		addDevice.Trust = 0 //
+		addDevice.Country = ipInfo.Country
+		addDevice.State = ipInfo.Province
+		addDevice.City = ipInfo.City
+		addDevice.Session = sessionSn
+		addDevice.UpdateTime = nowTime
+		addDevice.CreateTime = nowTime
+		models.AddLoginDevice(addDevice)
+	} else {
+		up := map[string]interface{}{
+			"session":     sessionSn,
+			"update_time": nowTime,
+		}
+		models.EditLoginDeviceInfo(has.ID, up)
+	}
 
 	// 检测用户券信息和发放券
 	if user.IsPay != "true" {

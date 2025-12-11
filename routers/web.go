@@ -62,10 +62,27 @@ func webRouter(router *gin.Engine) {
 
 	// google 验证器接口
 	web.POST("/auth/auth_info", controller.GetGoogleAuth)      // 创建信息
-	web.POST("/auth/verify_code", controller.VerifyCode)       // 验证
+	web.POST("/auth/verify_code", controller.VerifyCode)       // 验证google
 	web.POST("/auth/bing_auth", controller.VerifyCodeBind)     // 绑定信息
 	web.POST("/auth/unbind_auth", controller.VerifyCodeUnBind) // 解绑信息
 
+	web.POST("/auth/get_info", controller.GetUserAuthInfo) // 用户是否需要验证
+	web.POST("/auth/prompt_dismiss", controller.SecurityPromptDismiss)
+	web.POST("/auth/prompt_need", controller.SecurityPromptNeed)
+	web.POST("/auth/user_prompt_need", controller.UserPromptNeed)
+	web.POST("/auth/user_prompt_dismiss", controller.UserPromptDismiss)
+	web.POST("/auth/verify_email", controller.VerifyEmailCode) //  验证邮箱
+	web.POST("/auth/bind_email", controller.BindEmailAuth)     // 绑定邮箱
+	web.POST("/auth/unbind_email", controller.UnBindEmailAuth) // 解绑邮箱
+
+	web.POST("/auth/set_open", controller.SetOpen)     // 设置开关
+	web.POST("/auth/qrcode", controller.GetDownQrCode) //获取下载地址二维码
+	web.GET("/auth/download", controller.GetDownload)  //跳转下载地址
+	web.POST("/auth/download", controller.GetDownload) //跳转下载地址
+
+	save := router.Group("/web/save")
+	save.POST("/device_list", controller.SafeDevice) // 安全设备列表		//center
+	save.POST("/del_device", controller.DelDevice)   // 删除设备			//center
 	//web.POST("/invite/stats_click", controller.StatsClick) // 活动点击统计
 
 	// invite 邀请返佣接口
