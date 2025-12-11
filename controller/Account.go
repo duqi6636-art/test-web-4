@@ -1373,6 +1373,35 @@ func DoLogin(user models.Users, email, ip string, signParam models.SignParam, up
 	models.UpdateUserById(user.Id, u)
 	//fmt.Println("sessionSn-------" + sessionSn)
 
+	err1, has := models.GetLoginDeviceBy(user.Id, ip)
+
+	// 操作登录设备记录
+	if err1 != nil || has.ID == 0 {
+		addDevice := models.LoginDevices{}
+		addDevice.Cate = "email_reg"
+		addDevice.Uid = user.Id
+		addDevice.Username = user.Username
+		addDevice.Email = user.Email
+		addDevice.Device = "cherry-" + util.RandStr("r", 16)
+		addDevice.DeviceNo = ip
+		addDevice.Platform = "web"
+		addDevice.Ip = ip
+		addDevice.Trust = 0 //
+		addDevice.Country = ipInfo.Country
+		addDevice.State = ipInfo.Province
+		addDevice.City = ipInfo.City
+		addDevice.Session = sessionSn
+		addDevice.UpdateTime = nowTime
+		addDevice.CreateTime = nowTime
+		models.AddLoginDevice(addDevice)
+	} else {
+		up := map[string]interface{}{
+			"session":     sessionSn,
+			"update_time": nowTime,
+		}
+		models.EditLoginDeviceInfo(has.ID, up)
+	}
+
 	// 检测用户券信息和发放券
 	if user.IsPay != "true" {
 		CouponInfoAuto(user, "new_user")
