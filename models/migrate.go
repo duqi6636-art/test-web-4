@@ -1,7 +1,7 @@
 package models
 
 import (
-	"api-360proxy/web/db/clickhousedb"
+	"cherry-web-api/db/clickhousedb"
 	"fmt"
 )
 

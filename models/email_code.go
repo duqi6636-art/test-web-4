@@ -1,6 +1,6 @@
 package models
 
-import "api-360proxy/web/pkg/util"
+import "cherry-web-api/pkg/util"
 
 type EmailCode struct {
 	ID         int    `json:"id"`

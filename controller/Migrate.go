@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"api-360proxy/web/models"
+	"cherry-web-api/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )

@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"api-360proxy/pkg/ipdat"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/pkg/ipdat"
+	"cherry-web-api/pkg/util"
 	"github.com/gin-gonic/gin"
 	"strings"
 )

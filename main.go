@@ -1,12 +1,12 @@
 package main
 
 import (
-	"api-360proxy/pkg/ipdat"
-	"api-360proxy/web/crons"
-	"api-360proxy/web/db/clickhousedb"
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/setting"
-	"api-360proxy/web/routers"
+	"cherry-web-api/crons"
+	"cherry-web-api/db/clickhousedb"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/ipdat"
+	"cherry-web-api/pkg/setting"
+	"cherry-web-api/routers"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"

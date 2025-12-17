@@ -1,7 +1,7 @@
 package models
 
 import (
-	"api-360proxy/web/pkg/setting"
+	"cherry-web-api/pkg/setting"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

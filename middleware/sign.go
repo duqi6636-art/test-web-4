@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"api-360proxy/web/models"
+	"cherry-web-api/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -70,4 +70,3 @@ func SignMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
-

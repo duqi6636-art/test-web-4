@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"api-360proxy/web/e"
-	"api-360proxy/web/models"
 	"bytes"
+	"cherry-web-api/e"
+	"cherry-web-api/models"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"io"

@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"api-360proxy/web/e"
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
-	"api-360proxy/web/service/email"
 	"bytes"
+	"cherry-web-api/e"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
+	"cherry-web-api/service/email"
 	"crypto/md5"
 	"crypto/sha1"
 	"encoding/base64"

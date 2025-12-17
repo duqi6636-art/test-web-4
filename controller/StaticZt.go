@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"api-360proxy/statistics/pkg/util"
-	"api-360proxy/web/models"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
 	"encoding/json"
 	"fmt"
 	"strings"

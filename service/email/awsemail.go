@@ -1,9 +1,8 @@
 package email
 
 import (
-	semail "api-360proxy/service/email"
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -40,6 +39,42 @@ type AwsSendReq struct {
 	Msg       string      `json:"msg"`
 	Ret       interface{} `json:"ret"`
 	Timestamp int         `json:"timestamp"`
+}
+
+// 发送邮件
+
+func AwsSend(email, tpl_param, token, tpl_sn, AccSn, form string) (int, string, string) {
+	//发送邮件
+	getAwsSend := AwsSendReq{}
+
+	reqMap := map[string]string{
+		"tpl_sn":    tpl_sn,
+		"tpl_param": tpl_param,
+		"acc_sn":    AccSn,
+		"token":     token,
+		"to":        email,
+		"from":      form,
+		"from_name": "360Proxy",
+	}
+	getAwsSendApiResult := HttpPostForm("http://api.martianinc.co:5705/mail/smtp/send", reqMap)
+
+	if getAwsSendApiResult == "" {
+		return -1, "err", getAwsSendApiResult
+	}
+
+	err := json.Unmarshal([]byte(getAwsSendApiResult), &getAwsSend)
+	if err != nil {
+		return -1, err.Error(), getAwsSendApiResult
+	}
+	//fmt.Println(getAwsSend)
+	if getAwsSend.Code == 2 {
+		//token过期
+		return -2, "token err", getAwsSendApiResult
+	}
+	if getAwsSend.Code != 0 {
+		return -3, getAwsSend.Msg, getAwsSendApiResult
+	}
+	return 0, "ok", getAwsSendApiResult
 }
 
 func AwsSendEmail(email string, email_type int, vars map[string]string, ip string) bool {
@@ -94,67 +129,13 @@ func AwsSendEmail(email string, email_type int, vars map[string]string, ip strin
 	}
 	vs, _ := json.Marshal(vars)
 	AccSn := models.GetConfigV("AWS_AccSn")
-	sendRes, msg, result := semail.AwsSend(email, string(vs), token, tplSn, AccSn, from)
+	sendRes, msg, result := AwsSend(email, string(vs), token, tplSn, AccSn, from)
 	fmt.Println(sendRes)
 	fmt.Println(msg)
 	models.AddLogEmail(email, string(vs), tplSn, result, ip)
 	if sendRes == -2 {
 		models.UpConfigs(keyInfo, "")
 		return AwsSendEmail(email, email_type, vars, ip)
-	}
-	if sendRes != 0 {
-		return false
-	}
-	return true
-}
-func AwsSendEmailMarket(email, code string, vars map[string]string, ip string) bool {
-	tplSn := ""
-	default_mail := models.GetConfigVal("default_email")
-	confEmail := models.GetConfEmailBy8(default_mail, code)
-	tplSn = confEmail.TplId
-	from := confEmail.FromTo
-	fromConf := models.GetConfigVal("AWS_From")
-	if from == "" {
-		from = fromConf
-	}
-
-	if tplSn == "" || from == "" {
-		return false
-	}
-	//获取token
-	keyInfo := "AWS_TOKEN"
-	err, AwsToken := models.GetConfigs(keyInfo)
-	token := ""
-
-	if err != nil || AwsToken.Value == "" {
-		var res = false
-		res, token = GetAwsToken()
-		if !res || token == "" {
-			return false
-		}
-		AwsToken.Value = token
-		models.UpConfigs(keyInfo, token)
-	} else {
-		token = AwsToken.Value
-	}
-
-	if len(confEmail.PackageName) > 0 && len(confEmail.PackageUrl) > 0 {
-
-		vars["packageName"] = confEmail.PackageName
-		vars["packageUrl"] = confEmail.PackageUrl
-	}
-
-	vs, _ := json.Marshal(vars)
-	AccSn := models.GetConfigVal("AWS_AccSn")
-	//from := models.GetConfigVal("AWS_From")
-	sendRes, msg, result := semail.AwsSend(email, string(vs), token, tplSn, AccSn, from)
-	fmt.Println(sendRes)
-	fmt.Println(msg)
-	models.AddLogEmail(email, string(vs), tplSn, result, ip)
-	// 写入发送记录日志
-	if sendRes == -2 {
-		models.UpConfigs(keyInfo, "")
-		return AwsSendEmailMarket(email, code, vars, ip)
 	}
 	if sendRes != 0 {
 		return false

@@ -2,13 +2,9 @@ package email
 
 // 赛邮
 import (
-	"api-360proxy/pkg/ipdat"
-	"api-360proxy/service/email"
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
 	"fmt"
-	"strings"
-	//"github.com/coocood/freecache"
 )
 
 type SubEmailSendResult struct {
@@ -28,26 +24,6 @@ func SendEmailCode(address, codeType string, params models.SignParam, ip, area, 
 		result bool
 		data   string
 	)
-
-	if useEmail == "sub_mail" { //赛邮
-		title := verifyCode + " is your verification code"
-		template := models.GetConfigVal("submail_code_tpl")
-		app_id := models.GetConfigVal("submail_app_id")
-		app_key := models.GetConfigVal("submail_app_key")
-		e_params := map[string]string{
-			"code":     verifyCode,
-			"username": address,
-			"info":     title,
-		}
-		areaT := "cn"
-		area = strings.ToLower(area)
-		if area != "cn" && area != "tw" && area != "zh-cn" && area != "zh_cn" {
-			areaT = "us"
-		}
-		result, data = email.SubEmail(address, title, app_id, app_key, template, areaT, e_params, map[string]string{})
-		fmt.Println(result)
-		fmt.Println(data)
-	}
 
 	if useEmail == "aws_mail" { //亚马逊
 		vars := make(map[string]string)
@@ -75,31 +51,9 @@ func SendEmailCode(address, codeType string, params models.SignParam, ip, area, 
 
 // / 发送谷歌登录新注册用户邮箱
 func SendGoogleLoginNewUserEmail(address, password, ip, area, useEmail string) {
-
 	var (
 		result bool
-		data   string
 	)
-
-	if useEmail == "sub_mail" { //赛邮
-		title := password + " is your verification code"
-		template := models.GetConfigVal("submail_code_tpl")
-		app_id := models.GetConfigVal("submail_app_id")
-		app_key := models.GetConfigVal("submail_app_key")
-		e_params := map[string]string{
-			"code":     password,
-			"username": address,
-			"info":     title,
-		}
-		areaT := "cn"
-		area = strings.ToLower(area)
-		if area != "cn" && area != "tw" && area != "zh-cn" && area != "zh_cn" {
-			areaT = "us"
-		}
-		result, data = email.SubEmail(address, title, app_id, app_key, template, areaT, e_params, map[string]string{})
-		fmt.Println(result)
-		fmt.Println(data)
-	}
 
 	if useEmail == "aws_mail" { //亚马逊
 		vars := make(map[string]string)
@@ -139,14 +93,6 @@ func SendEmail(address, password, ip string) (bool, string) {
 	var res = false
 	var msg = ""
 	useEmail := models.GetConfigVal("default_email")
-	if useEmail == "sub_mail" { //赛邮
-		// 注册完成发送邮件
-		app_id := models.GetConfigVal("submail_app_id")
-		app_key := models.GetConfigVal("submail_app_key")
-		log_url := models.GetConfigVal("log_img_url")
-		ipArea, _ := ipdat.IPDat.GetIpInfo(ip)
-		res, msg = email.SendEmailRegHtml(address, password, app_id, app_key, log_url, ipArea.CountryCode)
-	}
 
 	if useEmail == "aws_mail" { //亚马逊
 		vars := make(map[string]string)

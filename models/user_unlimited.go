@@ -1,8 +1,8 @@
 package models
 
 import (
-	"api-360proxy/web/db/clickhousedb"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/db/clickhousedb"
+	"cherry-web-api/pkg/util"
 )
 
 // 不限量流量IP

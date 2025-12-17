@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"api-360proxy/web/models"
+	"cherry-web-api/models"
 	"encoding/json"
 	"fmt"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"

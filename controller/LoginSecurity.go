@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"api-360proxy/web/constants"
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/constants"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"

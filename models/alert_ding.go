@@ -1,8 +1,8 @@
 package models
 
 import (
-	"api-360proxy/web/pkg/util"
 	"bytes"
+	"cherry-web-api/pkg/util"
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"

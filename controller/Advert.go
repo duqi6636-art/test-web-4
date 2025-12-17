@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"sort"
@@ -137,7 +137,7 @@ func GetNotice(c *gin.Context) {
 			return noticeList[i].ReleaseTime > noticeList[j].ReleaseTime
 		})
 	}
-	resList,noRead,_  := DealMsgCate(noticeList, uid, lang)
+	resList, noRead, _ := DealMsgCate(noticeList, uid, lang)
 
 	red_dots := 0
 	if noRead > 0 {
@@ -168,7 +168,6 @@ func GetNotice(c *gin.Context) {
 	})
 	return
 }
-
 
 // 处理消息分类
 func DealMsgCate(noticeList []models.CmNotice, uid int, lang string) ([]models.ResNotice, int, int) {
@@ -277,7 +276,6 @@ func DealMsgCate(noticeList []models.CmNotice, uid int, lang string) ([]models.R
 
 	return noticeRes, noticeNoReadNum, hasNew
 }
-
 
 //func GetNotice_bak(c *gin.Context) {
 //	sessionId := c.DefaultPostForm("session", "")

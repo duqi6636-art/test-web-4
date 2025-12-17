@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"api-360proxy/web/e"
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
 	"bytes"
+	"cherry-web-api/e"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"

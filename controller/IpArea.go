@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/ipdat"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/ipdat"
+	"cherry-web-api/pkg/util"
 	"encoding/json"
 	"strings"
 )

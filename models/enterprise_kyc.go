@@ -1,6 +1,6 @@
 package models
 
-import "api-360proxy/web/pkg/util"
+import "cherry-web-api/pkg/util"
 
 // EnterpriseKyc 企业认证记录表
 type EnterpriseKyc struct {

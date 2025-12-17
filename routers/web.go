@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"api-360proxy/web/controller"
+	"cherry-web-api/controller"
 
 	"github.com/gin-gonic/gin"
 )

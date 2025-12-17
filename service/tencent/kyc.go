@@ -1,9 +1,9 @@
 package tencent
 
 import (
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
 	"bytes"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
 	"crypto/sha1"
 	"encoding/hex"
 	"encoding/json"

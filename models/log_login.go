@@ -1,7 +1,7 @@
 package models
 
 import (
-	"api-360proxy/web/constants"
+	"cherry-web-api/constants"
 	"fmt"
 	"log"
 	"strconv"

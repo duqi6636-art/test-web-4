@@ -1,7 +1,7 @@
 package models
 
 import (
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/pkg/util"
 )
 
 type UserFlow struct {

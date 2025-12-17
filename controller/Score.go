@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"api-360proxy/pkg/ipdat"
-	"api-360proxy/web/e"
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
+	"cherry-web-api/e"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/ipdat"
+	"cherry-web-api/pkg/util"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -203,7 +203,6 @@ func ExScoreFlowDay(c *gin.Context) {
 	JsonReturn(c, e.SUCCESS, "__T_SUCCESS", resInfo)
 	return
 }
-
 
 // 获取积分记录
 // @BasePath /api/v1

@@ -1,6 +1,6 @@
 package models
 
-import "api-360proxy/web/pkg/util"
+import "cherry-web-api/pkg/util"
 
 // 流量
 type EmailMarketModel struct {

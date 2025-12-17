@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"api-360proxy/web/e"
-	"api-360proxy/web/models"
+	"cherry-web-api/e"
+	"cherry-web-api/models"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
 	"strings"

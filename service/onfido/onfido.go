@@ -1,10 +1,10 @@
 package onfido
 
 import (
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
-	"api-360proxy/web/service/helper"
 	"bytes"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
+	"cherry-web-api/service/helper"
 	"encoding/json"
 	"errors"
 	"fmt"

@@ -1,9 +1,9 @@
 package crons
 
 import (
-	"api-360proxy/web/models"
-	"api-360proxy/web/pkg/util"
-	emailSender "api-360proxy/web/service/email"
+	"cherry-web-api/models"
+	"cherry-web-api/pkg/util"
+	emailSender "cherry-web-api/service/email"
 	"fmt"
 	uuid "github.com/satori/go.uuid"
 	"strings"
@@ -31,10 +31,6 @@ func MarketDoSending() {
 						//发送邮件
 						vars := make(map[string]string)
 						vars["email"] = email
-						if default_mail == "aws_mail" {
-							result = emailSender.AwsSendEmailMarket(email, v.Code, vars, "market_email")
-							fmt.Println("send result aws:", result)
-						}
 						if default_mail == "tencent_mail" {
 							result = emailSender.TencentSendEmailMarket(email, v.Code, vars, "market_email")
 							fmt.Println("send result tencent:", result)

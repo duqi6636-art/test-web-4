@@ -344,3 +344,70 @@ func GenerateRandomString(length int) string {
 
 	return string(randomStr)
 }
+
+func HttpGETHeader(url string, header map[string]interface{}) (err error, result string) {
+	// 创建请求
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		panic(err)
+	}
+	// 添加 Header 参数
+	if len(header) > 0 {
+		for k, v := range header {
+			req.Header.Add(k, v.(string))
+		}
+	}
+	// 发送请求
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	// 读取响应
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err, ""
+	}
+
+	return nil, string(body)
+}
+
+// Post 请求 httpPostForm(带请求头)
+
+func HttpPostFormHeader(postUrl string, param map[string]string, header map[string]interface{}) (err error, result string) {
+	data := make(url.Values)
+	for k, v := range param {
+		data[k] = []string{v}
+	}
+	req, err := http.NewRequest("POST", postUrl, strings.NewReader(data.Encode()))
+	if err != nil {
+		return err, ""
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if len(header) > 0 {
+		for k, v := range header {
+			req.Header.Set(k, v.(string))
+		}
+	}
+	resp, err := (&http.Client{}).Do(req)
+	if err != nil {
+		return err, ""
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err, ""
+	}
+	return nil, string(body)
+}
+
+// 获取凌晨时间戳
+
+func Lingchen() int {
+	formatLayout := "2006-01-02"
+	today := time.Now().Format(formatLayout)
+	t, _ := time.ParseInLocation(formatLayout, today, time.Local)
+	return int(t.Unix())
+}
